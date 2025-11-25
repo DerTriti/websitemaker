@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Site Reactor Pro</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="color-scheme" content="dark light" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:radial-gradient(circle at 10% 0%,#1f2937 0,#020617 45%,#000 100%);
+  color:#e5e7eb;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+}
+.app{
+  width:100%;
+  max-width:1250px;
+  padding:16px;
+  display:grid;
+  grid-template-columns:minmax(0,380px) minmax(0,1fr);
+  gap:16px;
+}
+@media(max-width:960px){
+  .app{grid-template-columns:1fr;grid-auto-rows:auto}
+}
+.card{
+  background:rgba(15,23,42,.96);
+  border-radius:18px;
+  border:1px solid rgba(148,163,184,.4);
+  box-shadow:0 20px 60px rgba(0,0,0,.75);
+  padding:16px 18px;
+}
+.left{display:flex;flex-direction:column;gap:14px}
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:6px;
+}
+.title{
+  font-weight:800;
+  font-size:1.4rem;
+  letter-spacing:-.03em;
+}
+.badge{
+  font-size:.75rem;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,.6);
+  color:#9ca3af;
+}
+.label{
+  font-size:.8rem;
+  color:#9ca3af;
+  margin-bottom:3px;
+}
+.input,.select,.textarea{
+  width:100%;
+  border-radius:12px;
+  border:1px solid rgba(148,163,184,.6);
+  background:#020617;
+  color:#e5e7eb;
+  padding:9px 11px;
+  font-size:.9rem;
+}
+.input:focus-visible,
+.select:focus-visible,
+.textarea:focus-visible{
+  outline:2px solid #3b82f6;
+  outline-offset:1px;
+}
+.row{display:flex;gap:10px}
+.row > *{flex:1 1 0}
+.small{
+  font-size:.78rem;
+  color:#64748b;
+}
+.btn{
+  all:unset;
+  cursor:pointer;
+  padding:9px 13px;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,.6);
+  background:#020617;
+  font-size:.85rem;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:transform .12s ease,box-shadow .18s ease,background .15s ease,color .15s ease,border-color .15s ease;
+}
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 10px 28px rgba(15,23,42,.9);
+}
+.btn-primary{
+  border-color:transparent;
+  background:linear-gradient(135deg,#3b82f6,#22c55e);
+  color:#ecfeff;
+}
+.btn-primary:hover{
+  box-shadow:0 16px 40px rgba(37,99,235,.7);
+}
+.btn-toggle.active{
+  background:#0f172a;
+  border-color:#3b82f6;
+  color:#bfdbfe;
+}
+.btn-bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.color-input{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.color-input input[type=color]{
+  width:40px;
+  height:32px;
+  padding:0;
+  border-radius:12px;
+  border:1px solid rgba(148,163,184,.6);
+  background:transparent;
+}
+.section-title{
+  font-size:.88rem;
+  font-weight:600;
+  margin-top:6px;
+}
+.subsection{
+  margin-top:4px;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px dashed rgba(51,65,85,.9);
+}
+.subsection-title{
+  font-size:.8rem;
+  font-weight:600;
+  color:#cbd5f5;
+  margin-bottom:2px;
+}
+.preview-card{display:flex;flex-direction:column;gap:10px}
+.preview-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.preview-tabs{display:flex;gap:8px;font-size:.82rem}
+.preview-tabs button{
+  all:unset;
+  cursor:pointer;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,.6);
+  color:#9ca3af;
+}
+.preview-tabs button.active{
+  background:#0f172a;
+  color:#e5e7eb;
+}
+.import-bar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  font-size:.8rem;
+}
+.select-small{
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,.6);
+  background:#020617;
+  color:#e5e7eb;
+  padding:6px 10px;
+  font-size:.8rem;
+}
+.res-bar{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  font-size:.78rem;
+  margin-top:6px;
+}
+.res-btn{
+  all:unset;
+  cursor:pointer;
+  padding:4px 9px;
+  border-radius:999px;
+  border:1px solid rgba(55,65,81,.9);
+  color:#9ca3af;
+}
+.res-btn.active{
+  border-color:#3b82f6;
+  color:#bfdbfe;
+  background:#020617;
+}
+
+.preview-box{
+  border-radius:14px;
+  border:1px solid rgba(30,64,175,.7);
+  overflow:auto;
+  background:#020617;
+  min-height:260px;
+  padding:8px;
+}
+.frame-shell{
+  margin:0 auto;
+  max-width:100%;
+}
+.frame-shell iframe{
+  width:100%;
+  height:360px;
+  border:0;
+  background:white;
+  display:block;
+}
+@media(max-width:600px){
+  .frame-shell iframe{height:320px}
+}
+.textarea{
+  min-height:260px;
+  resize:vertical;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.8rem;
+}
+.status{
+  font-size:.8rem;
+  color:#9ca3af;
+  margin-top:2px;
+}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;font-size:.75rem;color:#64748b}
+.tag{padding:2px 7px;border-radius:999px;border:1px solid rgba(51,65,85,.9)}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- LEFT PANEL -->
+  <section class="card left">
+    <div class="header">
+      <div>
+        <div class="title">Site Reactor Pro</div>
+        <div style="font-size:.75rem;color:#9ca3af;margin-top:2px">
+          Generate, edit, import & export mini-sites.
+        </div>
+      </div>
+      <div class="badge">multi-layout · multi-export</div>
+    </div>
+
+    <div>
+      <div class="label">Site title</div>
+      <input id="siteTitle" class="input" placeholder="My generated site" />
+    </div>
+
+    <div class="row">
+      <div>
+        <div class="label">Layout</div>
+        <select id="layout" class="select">
+          <option value="hero">Hero landing</option>
+          <option value="blog">Blog article</option>
+          <option value="grid">Card grid</option>
+          <option value="portfolio">Portfolio gallery</option>
+          <option value="pricing">Pricing page</option>
+          <option value="login">Login page</option>
+          <option value="dashboard">Simple dashboard</option>
+        </select>
+      </div>
+      <div>
+        <div class="label">Theme</div>
+        <select id="theme" class="select">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="pastel">Pastel</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <div class="label">Accent color</div>
+        <div class="color-input">
+          <input id="accentColor" type="color" value="#2563eb" />
+          <input id="accentHex" class="input" value="#2563eb" />
+        </div>
+      </div>
+      <div>
+        <div class="label">Font</div>
+        <select id="font" class="select">
+          <option value="system">System UI</option>
+          <option value="inter">Inter</option>
+          <option value="poppins">Poppins</option>
+          <option value="serif">Serif (Merriweather)</option>
+          <option value="mono">Monospace</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">Main heading</div>
+      <input id="mainHeading" class="input" placeholder="Welcome to your new site" />
+    </div>
+
+    <div>
+      <div class="label">Subtext</div>
+      <input id="subText" class="input" placeholder="A short description that explains what this is about." />
+      <div class="small">You can edit all texts later directly in the preview or in the generated HTML.</div>
+    </div>
+
+    <div class="row">
+      <div>
+        <div class="label">Primary button label</div>
+        <input id="primaryLabel" class="input" placeholder="Get started" />
+      </div>
+      <div>
+        <div class="label">Secondary label (optional)</div>
+        <input id="secondaryLabel" class="input" placeholder="Learn more" />
+      </div>
+    </div>
+
+    <div class="section-title">Structure options</div>
+    <div class="subsection">
+      <div class="subsection-title">Blocks</div>
+      <div class="small" style="margin-bottom:6px">Used where they make sense for the chosen layout.</div>
+      <div class="row">
+        <label class="small"><input id="optNavbar" type="checkbox" checked /> Navbar</label>
+        <label class="small"><input id="optFooter" type="checkbox" checked /> Footer</label>
+      </div>
+      <div class="row" style="margin-top:4px">
+        <label class="small"><input id="optHeroCta" type="checkbox" checked /> Hero CTA section</label>
+        <label class="small"><input id="optFaq" type="checkbox" /> FAQ / extra section</label>
+      </div>
+    </div>
+
+    <div class="section-title">Generated JS options</div>
+    <div class="subsection">
+      <div class="subsection-title">Enhancements</div>
+      <div class="row">
+        <label class="small"><input id="optSmoothScroll" type="checkbox" checked /> Smooth scroll for in-page links</label>
+      </div>
+      <div class="row">
+        <label class="small"><input id="optMobileNav" type="checkbox" checked /> Mobile nav toggle</label>
+      </div>
+      <div class="row">
+        <label class="small"><input id="optDarkToggle" type="checkbox" /> Simple dark-mode toggle</label>
+      </div>
+      <div class="small" style="margin-top:4px">JS is embedded inside the generated HTML file.</div>
+    </div>
+
+    <div class="btn-bar">
+      <button id="generateBtn" class="btn btn-primary" type="button">Generate site</button>
+      <button id="copyBtn" class="btn" type="button">Copy code</button>
+    </div>
+    <div class="status" id="status">Ready. Adjust options and click “Generate site”.</div>
+
+    <div class="tag-row">
+      <span class="tag">multi layout</span>
+      <span class="tag">edit in preview</span>
+      <span class="tag">import / export</span>
+      <span class="tag">.html · .htm · .srhtml · .websr</span>
+      <span class="tag">pure client-side</span>
+    </div>
+  </section>
+
+  <!-- RIGHT PANEL -->
+  <section class="card preview-card">
+    <div class="preview-header">
+      <div class="preview-tabs">
+        <button id="tabPreview" class="active" type="button">Preview</button>
+        <button id="tabCode" type="button">HTML code</button>
+      </div>
+      <div class="import-bar">
+        <button id="editToggle" type="button" class="btn btn-toggle">Edit in preview</button>
+        <button id="syncBtn" type="button" class="btn">Sync from preview</button>
+        <button id="importBtn" type="button" class="btn">Import…</button>
+        <select id="exportExt" class="select-small">
+          <option value="html">.html</option>
+          <option value="htm">.htm</option>
+          <option value="srhtml">.srhtml</option>
+          <option value="websr">.websr</option>
+        </select>
+        <button id="downloadBtn" type="button" class="btn">Download</button>
+      </div>
+    </div>
+
+    <div class="res-bar">
+      <span class="small">Preview width:</span>
+      <button type="button" data-res="auto"   class="res-btn active">Auto</button>
+      <button type="button" data-res="1440"  class="res-btn">Desktop 1440</button>
+      <button type="button" data-res="1280"  class="res-btn">Laptop 1280</button>
+      <button type="button" data-res="1024"  class="res-btn">Tablet 1024</button>
+      <button type="button" data-res="768"   class="res-btn">Small tablet 768</button>
+      <button type="button" data-res="414"   class="res-btn">Mobile 414</button>
+    </div>
+
+    <div id="previewBox" class="preview-box">
+      <div id="frameShell" class="frame-shell">
+        <iframe id="previewFrame" title="Site preview"></iframe>
+      </div>
+    </div>
+
+    <textarea id="codeBox" class="textarea" spellcheck="false" style="display:none"></textarea>
+    <input id="importFile" type="file"
+           accept=".html,.htm,.srhtml,.websr,text/html"
+           style="display:none" />
+  </section>
+</div>
+
+<script>
+const qs = s => document.querySelector(s);
+
+const siteTitle   = qs('#siteTitle');
+const layoutSel   = qs('#layout');
+const themeSel    = qs('#theme');
+const accentColor = qs('#accentColor');
+const accentHex   = qs('#accentHex');
+const fontSel     = qs('#font');
+const mainHeading = qs('#mainHeading');
+const subText     = qs('#subText');
+const primaryLabel= qs('#primaryLabel');
+const secondaryLabel= qs('#secondaryLabel');
+
+const optNavbar      = qs('#optNavbar');
+const optFooter      = qs('#optFooter');
+const optHeroCta     = qs('#optHeroCta');
+const optFaq         = qs('#optFaq');
+const optSmoothScroll= qs('#optSmoothScroll');
+const optMobileNav   = qs('#optMobileNav');
+const optDarkToggle  = qs('#optDarkToggle');
+
+const generateBtn = qs('#generateBtn');
+const copyBtn     = qs('#copyBtn');
+const downloadBtn = qs('#downloadBtn');
+const statusEl    = qs('#status');
+const previewFrame= qs('#previewFrame');
+const codeBox     = qs('#codeBox');
+const previewBox  = qs('#previewBox');
+const frameShell  = qs('#frameShell');
+const tabPreview  = qs('#tabPreview');
+const tabCode     = qs('#tabCode');
+const editToggle  = qs('#editToggle');
+const syncBtn     = qs('#syncBtn');
+const importBtn   = qs('#importBtn');
+const importFile  = qs('#importFile');
+const exportExt   = qs('#exportExt');
+const resButtons  = Array.from(document.querySelectorAll('.res-btn'));
+
+let previewBlobUrl = null;
+let editMode = false;
+
+function setStatus(t){ statusEl.textContent = t; }
+
+/* Accent sync */
+function syncAccentInputs(fromColor){
+  if(fromColor){
+    accentHex.value = accentColor.value;
+  }else{
+    let v = accentHex.value.trim();
+    if(!v.startsWith('#')) v = '#'+v;
+    if(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v)){
+      accentColor.value = v;
+      accentHex.value = v;
+    }
+  }
+}
+accentColor.addEventListener('input',()=>syncAccentInputs(true));
+accentHex.addEventListener('input',()=>syncAccentInputs(false));
+
+/* Theme + font */
+function baseThemeVars(theme, accent){
+  if(theme === 'dark'){
+    return {
+      bg:'#020617',
+      surface:'#020617',
+      text:'#e5e7eb',
+      muted:'#9ca3af',
+      border:'rgba(148,163,184,.45)',
+      accent:accent || '#60a5fa'
+    };
+  }
+  if(theme === 'pastel'){
+    return {
+      bg:'#f5f3ff',
+      surface:'#fdf2ff',
+      text:'#1f2937',
+      muted:'#6b7280',
+      border:'rgba(199,210,254,.9)',
+      accent:accent || '#ec4899'
+    };
+  }
+  return {
+    bg:'#f9fafb',
+    surface:'#ffffff',
+    text:'#111827',
+    muted:'#6b7280',
+    border:'rgba(209,213,219,1)',
+    accent:accent || '#2563eb'
+  };
+}
+
+function fontCSS(fontKey){
+  switch(fontKey){
+    case 'inter':
+      return {
+        import:`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');`,
+        family:`'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`
+      };
+    case 'poppins':
+      return {
+        import:`@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');`,
+        family:`'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`
+      };
+    case 'serif':
+      return {
+        import:`@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');`,
+        family:`'Merriweather', 'Times New Roman', serif`
+      };
+    case 'mono':
+      return {
+        import:``,
+        family:`ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace`
+      };
+    default:
+      return {
+        import:``,
+        family:`system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`
+      };
+  }
+}
+
+/* Layout helpers */
+function buildNavbar(data){
+  if(!data.navbar) return '';
+  return `
+<header class="nav">
+  <div class="logo" data-editable="text">${data.title || 'My Site'}</div>
+  <nav class="nav-links">
+    <a href="#section-1" data-editable="text">Section 1</a>
+    <a href="#section-2" data-editable="text">Section 2</a>
+    <a href="#section-3" data-editable="text">Section 3</a>
+  </nav>
+  <button class="nav-toggle" aria-label="Toggle navigation"><span></span><span></span></button>
+</header>`;
+}
+function buildFooter(data){
+  if(!data.footer) return '';
+  const year = new Date().getFullYear();
+  return `
+<footer class="footer">
+  <div data-editable="text">© ${year} ${data.title || 'My Site'}. All rights reserved.</div>
+</footer>`;
+}
+
+/* Layouts */
+function buildHero(vars, f, data){
+  return `
+<div class="page">
+  ${buildNavbar(data)}
+  <main class="hero" id="section-1">
+    <div class="hero-text">
+      <h1 data-editable="text">${data.heading || 'Welcome to your new site'}</h1>
+      <p data-editable="text">${data.sub || 'You can edit this text in the generated HTML. Site Reactor just gives you a clean starting point.'}</p>
+      ${data.heroCta ? `
+      <div class="hero-actions">
+        <a href="#section-2" class="btn-primary" data-editable="text">${data.primary || 'Get started'}</a>
+        <a href="#section-3" class="btn-ghost" data-editable="text">${data.secondary || 'Learn more'}</a>
+      </div>` : ``}
+    </div>
+    <div class="hero-illustration">
+      <div class="card-metric">
+        <div class="metric-label" data-editable="text">Visitors</div>
+        <div class="metric-value" data-editable="text">12.4k</div>
+        <div class="metric-sub" data-editable="text">Last 30 days</div>
+      </div>
+      <div class="card-metric">
+        <div class="metric-label" data-editable="text">Conversion</div>
+        <div class="metric-value" data-editable="text">4.2%</div>
+        <div class="metric-sub" data-editable="text">Steady growth</div>
+      </div>
+    </div>
+  </main>
+
+  ${data.faq ? `
+  <section class="faq" id="section-2">
+    <h2 data-editable="text">Frequently asked questions</h2>
+    <div class="faq-grid">
+      <article>
+        <h3 data-editable="text">What is this?</h3>
+        <p data-editable="text">A small, clean starter template generated with Site Reactor.</p>
+      </article>
+      <article>
+        <h3 data-editable="text">Can I edit it?</h3>
+        <p data-editable="text">Yes. Everything here is just HTML and CSS, ready to tweak.</p>
+      </article>
+      <article>
+        <h3 data-editable="text">Do I need a build step?</h3>
+        <p data-editable="text">No. This runs as a single page, in any browser.</p>
+      </article>
+    </div>
+  </section>` : ``}
+
+  ${buildFooter(data)}
+</div>`;
+}
+function buildBlog(vars,f,data){
+  return `
+<div class="page">
+  ${buildNavbar(data)}
+  <header class="blog-header">
+    <div class="kicker" data-editable="text">ARTICLE</div>
+    <h1 data-editable="text">${data.heading || 'A clean starting point for your next article'}</h1>
+    <p class="lead" data-editable="text">${data.sub || 'This template is generated by Site Reactor. Replace this text with your own story, tutorial, or documentation.'}</p>
+    <div class="meta">
+      <span data-editable="text">Written by <strong>You</strong></span>
+      <span aria-hidden="true">·</span>
+      <span data-editable="text">${new Date().toLocaleDateString()}</span>
+    </div>
+  </header>
+  <article class="blog-body">
+    <p data-editable="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet urna sit amet leo euismod viverra. Site Reactor gives you structure so you can focus on writing instead of fiddling with layout from scratch.</p>
+    <p data-editable="text">Use this as a foundation: change colors, adapt spacing, and plug in your own typography choices. Because it is pure HTML and CSS, it works everywhere without build tools.</p>
+    <h2 data-editable="text">Subheading section</h2>
+    <p data-editable="text">Paragraphs, lists, and code blocks are styled for readability. You can extend the styles or remove what you do not need.</p>
+    <ul>
+      <li data-editable="text">Simple, semantic HTML</li>
+      <li data-editable="text">Minimal CSS with custom properties</li>
+      <li data-editable="text">No JavaScript required for the final page</li>
+    </ul>
+    <p data-editable="text">Happy writing!</p>
+  </article>
+  ${buildFooter(data)}
+</div>`;
+}
+function buildGrid(vars,f,data){
+  return `
+<div class="page">
+  ${buildNavbar(data)}
+  <header class="grid-header">
+    <h1 data-editable="text">${data.heading || 'A simple card grid layout'}</h1>
+    <p data-editable="text">${data.sub || 'Use this layout to showcase projects, links, resources, or anything else that belongs in cards.'}</p>
+  </header>
+  <main class="grid-main" id="section-1">
+    <div class="card">
+      <h2 data-editable="text">Card one</h2>
+      <p data-editable="text">Describe a project, a link, or anything important here.</p>
+      <a href="#" class="card-link" data-editable="text">${data.primary || 'View more'}</a>
+    </div>
+    <div class="card">
+      <h2 data-editable="text">Card two</h2>
+      <p data-editable="text">Cards adjust based on screen size and stay clean and legible.</p>
+      <a href="#" class="card-link" data-editable="text">${data.primary || 'View more'}</a>
+    </div>
+    <div class="card">
+      <h2 data-editable="text">Card three</h2>
+      <p data-editable="text">You can duplicate or remove cards directly in the HTML file.</p>
+      <a href="#" class="card-link" data-editable="text">${data.primary || 'View more'}</a>
+    </div>
+  </main>
+  ${buildFooter(data)}
+</div>`;
+}
+function buildPortfolio(vars,f,data){
+  return `
+<div class="page">
+  ${buildNavbar(data)}
+  <header class="grid-header">
+    <h1 data-editable="text">${data.heading || 'Portfolio'}</h1>
+    <p data-editable="text">${data.sub || 'Showcase your work in a simple, responsive gallery.'}</p>
+  </header>
+  <main class="portfolio-grid" id="section-1">
+    <article class="tile">
+      <div class="thumb" data-editable="text">Project 1</div>
+      <h2 data-editable="text">Landing page redesign</h2>
+      <p data-editable="text">A modern landing page built with clean, semantic HTML and CSS.</p>
+    </article>
+    <article class="tile">
+      <div class="thumb" data-editable="text">Project 2</div>
+      <h2 data-editable="text">Dashboard concept</h2>
+      <p data-editable="text">A minimal analytics dashboard exploring layout and typography.</p>
+    </article>
+    <article class="tile">
+      <div class="thumb" data-editable="text">Project 3</div>
+      <h2 data-editable="text">Mobile web app</h2>
+      <p data-editable="text">A simple web app prototype focused on mobile interactions.</p>
+    </article>
+  </main>
+  ${buildFooter(data)}
+</div>`;
+}
+function buildPricing(vars,f,data){
+  return `
+<div class="page">
+  ${buildNavbar(data)}
+  <header class="grid-header">
+    <h1 data-editable="text">${data.heading || 'Simple pricing for everyone'}</h1>
+    <p data-editable="text">${data.sub || 'Pick the plan that fits your project. You can rename everything here.'}</p>
+  </header>
+  <main class="pricing-grid" id="section-1">
+    <article class="plan">
+      <h2 data-editable="text">Starter</h2>
+      <p class="price" data-editable="text">$9</p>
+      <p class="price-sub" data-editable="text">per month</p>
+      <ul>
+        <li data-editable="text">Basic features</li>
+        <li data-editable="text">Email support</li>
+        <li data-editable="text">Single user</li>
+      </ul>
+      <a href="#" class="btn-primary" data-editable="text">${data.primary || 'Choose plan'}</a>
+    </article>
+    <article class="plan featured">
+      <h2 data-editable="text">Pro</h2>
+      <p class="price" data-editable="text">$19</p>
+      <p class="price-sub" data-editable="text">per month</p>
+      <ul>
+        <li data-editable="text">Everything in Starter</li>
+        <li data-editable="text">Priority support</li>
+        <li data-editable="text">Unlimited projects</li>
+      </ul>
+      <a href="#" class="btn-primary" data-editable="text">${data.primary || 'Choose plan'}</a>
+    </article>
+    <article class="plan">
+      <h2 data-editable="text">Team</h2>
+      <p class="price" data-editable="text">$49</p>
+      <p class="price-sub" data-editable="text">per month</p>
+      <ul>
+        <li data-editable="text">Team collaboration</li>
+        <li data-editable="text">Custom domains</li>
+        <li data-editable="text">Advanced analytics</li>
+      </ul>
+      <a href="#" class="btn-primary" data-editable="text">${data.primary || 'Choose plan'}</a>
+    </article>
+  </main>
+  ${buildFooter(data)}
+</div>`;
+}
+function buildLogin(vars,f,data){
+  return `
+<div class="page page-center">
+  <main class="login-card">
+    <div class="login-header">
+      <h1 data-editable="text">${data.heading || 'Sign in'}</h1>
+      <p data-editable="text">${data.sub || 'Use this minimal login layout as a starting point.'}</p>
+    </div>
+    <form class="login-form">
+      <label data-editable="text">Email</label>
+      <input type="email" placeholder="you@example.com" />
+      <label data-editable="text">Password</label>
+      <input type="password" placeholder="••••••••" />
+      <button type="submit" class="btn-primary" data-editable="text">${data.primary || 'Sign in'}</button>
+    </form>
+    <p class="login-meta" data-editable="text">No account yet? Create one or continue as guest.</p>
+  </main>
+</div>`;
+}
+function buildDashboard(vars,f,data){
+  return `
+<div class="page dashboard-page">
+  <aside class="sidebar">
+    <div class="logo" data-editable="text">${data.title || 'Dashboard'}</div>
+    <nav class="side-nav">
+      <a href="#section-1" data-editable="text">Overview</a>
+      <a href="#section-2" data-editable="text">Reports</a>
+      <a href="#section-3" data-editable="text">Settings</a>
+    </nav>
+  </aside>
+  <main class="dash-main">
+    <header class="dash-header">
+      <h1 data-editable="text">${data.heading || 'Overview'}</h1>
+      <p data-editable="text">${data.sub || 'This is a simple dashboard shell generated with Site Reactor.'}</p>
+    </header>
+    <section class="dash-grid" id="section-1">
+      <article class="stat">
+        <h2 data-editable="text">Revenue</h2>
+        <p class="stat-value" data-editable="text">$24.2k</p>
+        <p class="stat-sub" data-editable="text">Last 30 days</p>
+      </article>
+      <article class="stat">
+        <h2 data-editable="text">Active users</h2>
+        <p class="stat-value" data-editable="text">1,204</p>
+        <p class="stat-sub" data-editable="text">Currently online</p>
+      </article>
+      <article class="stat">
+        <h2 data-editable="text">Churn</h2>
+        <p class="stat-value" data-editable="text">2.4%</p>
+        <p class="stat-sub" data-editable="text">Stable</p>
+      </article>
+    </section>
+    <section class="dash-panel" id="section-2">
+      <h2 data-editable="text">Reports</h2>
+      <p data-editable="text">Use this area to plug in charts and detailed analytics.</p>
+    </section>
+    <section class="dash-panel" id="section-3">
+      <h2 data-editable="text">Settings</h2>
+      <p data-editable="text">A generic settings section to expand with real controls.</p>
+    </section>
+  </main>
+</div>`;
+}
+
+/* Enhancement JS inside generated site */
+function buildEnhancementScript(opts){
+  const parts=[];
+  if(opts.smoothScroll){
+    parts.push(`(function(){
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[href^="#"]');
+    if(!a) return;
+    var id=a.getAttribute('href').slice(1);
+    if(!id) return;
+    var el=document.getElementById(id);
+    if(!el) return;
+    e.preventDefault();
+    el.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+})();`);
+  }
+  if(opts.mobileNav){
+    parts.push(`(function(){
+  var btn=document.querySelector('.nav-toggle');
+  var nav=document.querySelector('.nav-links');
+  if(!btn||!nav) return;
+  btn.addEventListener('click',function(){
+    nav.classList.toggle('open');
+  });
+})();`);
+  }
+  if(opts.darkToggle){
+    parts.push(`(function(){
+  var btn=document.querySelector('[data-theme-toggle]');
+  if(!btn) return;
+  var root=document.documentElement;
+  function setMode(m){
+    root.setAttribute('data-mode',m);
+    localStorage.setItem('sr_theme_mode',m);
+  }
+  var stored=localStorage.getItem('sr_theme_mode')||'auto';
+  setMode(stored);
+  btn.textContent = stored==='dark'?'Light mode':(stored==='light'?'Auto mode':'Dark mode');
+  btn.addEventListener('click',function(){
+    var current=root.getAttribute('data-mode')||'auto';
+    var next=current==='auto'?'dark':(current==='dark'?'light':'auto');
+    setMode(next);
+    btn.textContent = next==='dark'?'Light mode':(next==='light'?'Auto mode':'Dark mode');
+  });
+})();`);
+  }
+  if(!parts.length) return '';
+  return `<script>
+${parts.join('\n\n')}
+</script>`;
+}
+
+/* Final HTML */
+function buildSiteHTML(opts){
+  const vars = baseThemeVars(opts.theme, opts.accent);
+  const f = fontCSS(opts.font);
+  const data = {
+    title: opts.title,
+    heading: opts.heading,
+    sub: opts.sub,
+    primary: opts.primary,
+    secondary: opts.secondary,
+    navbar: opts.navbar,
+    footer: opts.footer,
+    heroCta: opts.heroCta,
+    faq: opts.faq
+  };
+
+  let bodyContent='';
+  if(opts.layout==='blog') bodyContent=buildBlog(vars,f,data);
+  else if(opts.layout==='grid') bodyContent=buildGrid(vars,f,data);
+  else if(opts.layout==='portfolio') bodyContent=buildPortfolio(vars,f,data);
+  else if(opts.layout==='pricing') bodyContent=buildPricing(vars,f,data);
+  else if(opts.layout==='login') bodyContent=buildLogin(vars,f,data);
+  else if(opts.layout==='dashboard') bodyContent=buildDashboard(vars,f,data);
+  else bodyContent=buildHero(vars,f,data);
+
+  const enhancementScript = buildEnhancementScript(opts);
+
+  const doc = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>${(opts.title || 'My site').replace(/</g,'&lt;')}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+${f.import || ''}
+
+/* Base theme */
+:root{
+  --bg:${vars.bg};
+  --surface:${vars.surface};
+  --text:${vars.text};
+  --muted:${vars.muted};
+  --border:${vars.border};
+  --accent:${vars.accent};
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:${f.family};
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+[data-editable="text"]{cursor:text}
+
+/* Shared layout wrapper */
+.page{
+  min-height:100vh;
+  max-width:1040px;
+  margin:0 auto;
+  padding:20px 18px 32px;
+}
+
+/* Navbar */
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding-bottom:12px;
+  margin-bottom:18px;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.logo{
+  font-weight:700;
+  letter-spacing:-.03em;
+}
+.nav-links{
+  display:flex;
+  gap:12px;
+  font-size:.9rem;
+}
+.nav-links a{color:var(--muted)}
+.nav-links a:hover{color:var(--accent)}
+.nav-toggle{
+  display:none;
+  width:34px;height:28px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:4px;
+}
+.nav-toggle span{
+  width:16px;height:2px;background:var(--text);border-radius:999px;
+}
+
+/* Hero layout */
+.hero{
+  display:grid;
+  grid-template-columns:minmax(0,2.1fr) minmax(0,1.4fr);
+  gap:22px;
+  align-items:center;
+}
+.hero-text h1{
+  font-size:clamp(1.8rem,4vw,2.4rem);
+  line-height:1.2;
+  margin-bottom:8px;
+}
+.hero-text p{
+  color:var(--muted);
+  max-width:36rem;
+}
+.hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:14px;
+}
+.btn-primary,.btn-ghost{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 16px;
+  border-radius:999px;
+  font-size:.9rem;
+  border:1px solid transparent;
+}
+.btn-primary{
+  background:var(--accent);
+  color:white;
+}
+.btn-primary:hover{filter:brightness(1.05)}
+.btn-ghost{
+  border-color:var(--border);
+  color:var(--muted);
+  background:transparent;
+}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.hero-illustration{
+  display:grid;
+  gap:10px;
+}
+.card-metric{
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  padding:12px 14px;
+}
+.metric-label{font-size:.8rem;color:var(--muted)}
+.metric-value{font-size:1.4rem;font-weight:700}
+.metric-sub{font-size:.8rem;color:var(--muted)}
+
+/* FAQ */
+.faq{margin-top:28px;}
+.faq h2{font-size:1.25rem;margin-bottom:10px;}
+.faq-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.faq-grid article{
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  padding:10px 12px;
+}
+.faq-grid h3{font-size:1rem;margin-bottom:4px}
+.faq-grid p{font-size:.92rem;color:var(--muted)}
+
+/* Blog layout */
+.blog-header{
+  max-width:46rem;
+  margin:0 auto 20px;
+  padding-top:12px;
+}
+.blog-header h1{
+  font-size:clamp(1.9rem,4vw,2.4rem);
+  margin-bottom:6px;
+}
+.blog-header .kicker{
+  font-size:.8rem;
+  font-weight:600;
+  letter-spacing:.15em;
+  color:var(--accent);
+  margin-bottom:4px;
+}
+.blog-header .lead{
+  color:var(--muted);
+  margin-bottom:8px;
+}
+.blog-header .meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  font-size:.85rem;
+  color:var(--muted);
+}
+.blog-body{
+  max-width:46rem;
+  margin:0 auto;
+  padding-top:4px;
+  font-size:.98rem;
+}
+.blog-body h2{
+  font-size:1.2rem;
+  margin:16px 0 6px;
+}
+.blog-body p{margin:10px 0}
+.blog-body ul{margin:8px 0 8px 1.2rem}
+.blog-body li{margin:4px 0}
+
+/* Grid layout */
+.grid-header{
+  text-align:left;
+  margin-bottom:16px;
+}
+.grid-header h1{
+  font-size:clamp(1.4rem,3.2vw,2rem);
+}
+.grid-header p{
+  color:var(--muted);
+  max-width:30rem;
+}
+.grid-main{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin-top:6px;
+}
+.grid-main .card{
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  padding:14px;
+}
+.grid-main h2{
+  font-size:1.05rem;
+  margin-bottom:6px;
+}
+.card-link{
+  display:inline-flex;
+  margin-top:6px;
+  font-size:.9rem;
+}
+
+/* Portfolio */
+.portfolio-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.tile{
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  padding:12px;
+}
+.thumb{
+  border-radius:10px;
+  height:120px;
+  background:linear-gradient(135deg,rgba(59,130,246,.16),rgba(16,185,129,.16));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:.85rem;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+.tile h2{font-size:1.02rem;margin-bottom:4px}
+.tile p{font-size:.9rem;color:var(--muted)}
+
+/* Pricing */
+.pricing-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin-top:6px;
+}
+.plan{
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  padding:14px;
+}
+.plan.featured{border-width:2px;border-color:var(--accent);}
+.plan h2{font-size:1.05rem;margin-bottom:4px}
+.price{font-size:1.8rem;font-weight:700;}
+.price-sub{font-size:.85rem;color:var(--muted);}
+.plan ul{margin:8px 0 10px 1rem;font-size:.9rem;}
+.plan li{margin:3px 0}
+
+/* Login */
+.page-center{display:flex;align-items:center;justify-content:center;}
+.login-card{
+  width:100%;
+  max-width:420px;
+  border-radius:18px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  padding:18px 18px 20px;
+}
+.login-header h1{font-size:1.4rem;margin-bottom:4px;}
+.login-header p{font-size:.95rem;color:var(--muted);}
+.login-form{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-top:10px;
+}
+.login-form label{font-size:.85rem;}
+.login-form input{
+  border-radius:10px;
+  border:1px solid var(--border);
+  padding:8px 10px;
+  font-size:.9rem;
+}
+.login-form button{margin-top:8px;width:100%;}
+.login-meta{margin-top:8px;font-size:.85rem;color:var(--muted);}
+
+/* Dashboard */
+.dashboard-page{
+  display:grid;
+  grid-template-columns:220px minmax(0,1fr);
+  gap:14px;
+}
+.sidebar{
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  padding:14px;
+}
+.side-nav{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.side-nav a{font-size:.9rem;color:var(--muted);}
+.side-nav a:hover{color:var(--accent);}
+.dash-main{
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  padding:14px;
+}
+.dash-header h1{font-size:1.3rem;margin-bottom:4px;}
+.dash-header p{font-size:.9rem;color:var(--muted);}
+.dash-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin-top:14px;
+}
+.stat{
+  border-radius:12px;
+  border:1px solid var(--border);
+  padding:10px 12px;
+}
+.stat h2{font-size:.95rem;margin-bottom:4px;}
+.stat-value{font-size:1.4rem;font-weight:700;}
+.stat-sub{font-size:.8rem;color:var(--muted);}
+.dash-panel{
+  margin-top:16px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  padding:10px 12px;
+}
+.dash-panel h2{font-size:1.05rem;margin-bottom:4px;}
+
+/* Footer */
+.footer{
+  margin-top:24px;
+  padding-top:12px;
+  border-top:1px solid var(--border);
+  font-size:.85rem;
+  color:var(--muted);
+}
+
+/* Responsive tweaks */
+@media(max-width:860px){
+  .hero{grid-template-columns:1fr;}
+  .faq-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .portfolio-grid,
+  .pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .dashboard-page{grid-template-columns:minmax(0,1fr);}
+}
+@media(max-width:720px){
+  .nav-links{
+    position:absolute;
+    right:18px;
+    top:58px;
+    padding:8px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--surface);
+    flex-direction:column;
+    gap:6px;
+    min-width:140px;
+    display:none;
+  }
+  .nav-links.open{display:flex;}
+  .nav-toggle{display:flex;}
+  .page{padding-inline:14px;}
+  .grid-main,
+  .portfolio-grid,
+  .pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .dash-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:520px){
+  .grid-main,
+  .portfolio-grid,
+  .pricing-grid,
+  .dash-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+${bodyContent}
+${enhancementScript}
+</body>
+</html>`;
+  return doc;
+}
+
+/* Tabs */
+function showPreview(){
+  tabPreview.classList.add('active');
+  tabCode.classList.remove('active');
+  previewBox.style.display='';
+  codeBox.style.display='none';
+}
+function showCode(){
+  tabPreview.classList.remove('active');
+  tabCode.classList.add('active');
+  previewBox.style.display='none';
+  codeBox.style.display='';
+}
+tabPreview.addEventListener('click',showPreview);
+tabCode.addEventListener('click',showCode);
+
+/* Options */
+function gatherOptions(){
+  return {
+    title: siteTitle.value.trim(),
+    layout: layoutSel.value,
+    theme: themeSel.value,
+    accent: accentHex.value.trim() || '#2563eb',
+    font: fontSel.value,
+    heading: mainHeading.value.trim(),
+    sub: subText.value.trim(),
+    primary: primaryLabel.value.trim(),
+    secondary: secondaryLabel.value.trim(),
+    navbar: optNavbar.checked,
+    footer: optFooter.checked,
+    heroCta: optHeroCta.checked,
+    faq: optFaq.checked,
+    smoothScroll: optSmoothScroll.checked,
+    mobileNav: optMobileNav.checked,
+    darkToggle: optDarkToggle.checked
+  };
+}
+
+/* Generate + preview */
+function generateSite(){
+  const opts = gatherOptions();
+  const html = buildSiteHTML(opts);
+  codeBox.value = html;
+
+  if(previewBlobUrl){
+    URL.revokeObjectURL(previewBlobUrl);
+    previewBlobUrl = null;
+  }
+  const blob = new Blob([html],{type:"text/html"});
+  previewBlobUrl = URL.createObjectURL(blob);
+  previewFrame.src = previewBlobUrl;
+
+  setStatus('Generated. You can preview, edit, import, export, copy or download the HTML.');
+}
+generateBtn.addEventListener('click',generateSite);
+
+/* Resolution buttons */
+function setResolution(mode){
+  resButtons.forEach(b=>b.classList.toggle('active',b.dataset.res===mode));
+  if(mode==='auto'){
+    frameShell.style.maxWidth='100%';
+    frameShell.style.width='100%';
+  }else{
+    frameShell.style.maxWidth=mode+'px';
+    frameShell.style.width='100%';
+  }
+}
+resButtons.forEach(btn=>{
+  btn.addEventListener('click',()=>setResolution(btn.dataset.res));
+});
+
+/* Edit in preview */
+function applyPreviewEditable(on){
+  const doc = previewFrame.contentDocument;
+  if(!doc) return;
+  const nodes = doc.querySelectorAll('[data-editable="text"]');
+  nodes.forEach(el=>{
+    el.contentEditable = on ? 'true' : 'false';
+    if(on){
+      el.setAttribute('spellcheck','false');
+      el.style.outline = '1px dashed rgba(148,163,184,.7)';
+      el.style.outlineOffset = '2px';
+    }else{
+      el.style.outline = '';
+      el.style.outlineOffset = '';
+    }
+  });
+}
+previewFrame.addEventListener('load',()=>{ if(editMode) applyPreviewEditable(true); });
+
+editToggle.addEventListener('click',()=>{
+  editMode = !editMode;
+  editToggle.classList.toggle('active',editMode);
+  applyPreviewEditable(editMode);
+  setStatus(editMode ? 'Edit mode in preview: ON' : 'Edit mode in preview: OFF');
+});
+
+/* Sync preview -> code */
+syncBtn.addEventListener('click',()=>{
+  const doc = previewFrame.contentDocument;
+  if(!doc){
+    setStatus('Preview not ready to sync.');
+    return;
+  }
+  const html='<!DOCTYPE html>\n'+doc.documentElement.outerHTML;
+  codeBox.value=html;
+  setStatus('Synced HTML from preview into code editor.');
+});
+
+/* Copy / download */
+copyBtn.addEventListener('click',async()=>{
+  try{
+    await navigator.clipboard.writeText(codeBox.value || '');
+    setStatus('HTML copied to clipboard.');
+  }catch{
+    setStatus('Could not copy automatically. You can copy from the code tab.');
+  }
+});
+
+downloadBtn.addEventListener('click',()=>{
+  const html=codeBox.value || '';
+  const ext=(exportExt.value || 'html').toLowerCase();
+  const blob=new Blob([html],{type:"text/html"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const base=(siteTitle.value.trim() || 'site-reactor');
+  a.href=url;
+  a.download=base+'.'+ext;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},0);
+});
+
+/* Import */
+importBtn.addEventListener('click',()=>importFile.click());
+importFile.addEventListener('change',e=>{
+  const file=e.target.files[0];
+  if(!file){e.target.value='';return;}
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const txt=String(reader.result || '');
+    codeBox.value=txt;
+
+    const m=txt.match(/<title>([^<]*)<\/title>/i);
+    if(m && m[1]) siteTitle.value=m[1].trim();
+
+    if(previewBlobUrl){
+      URL.revokeObjectURL(previewBlobUrl);
+      previewBlobUrl=null;
+    }
+    const blob=new Blob([txt],{type:"text/html"});
+    previewBlobUrl=URL.createObjectURL(blob);
+    previewFrame.src=previewBlobUrl;
+
+    setStatus('Imported file: '+file.name);
+    e.target.value='';
+  };
+  reader.readAsText(file);
+});
+
+/* Defaults */
+siteTitle.value   = 'My generated site';
+mainHeading.value = 'Welcome to your freshly generated site';
+subText.value     = 'This page was created with Site Reactor Pro. Edit the HTML or live text to make it truly yours.';
+primaryLabel.value= 'Get started';
+secondaryLabel.value='Learn more';
+generateSite();
+</script>
+</body>
+</html>
